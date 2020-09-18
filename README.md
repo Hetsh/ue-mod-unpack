@@ -1,2 +1,2 @@
 # ue-zlib-inflate
-Script for decompressing .z files from Unreal Engine, specifically ARK Mods.
+Bash script for decompressing .z files from Unreal Engine. Desigend and tested with ARK mods.
