@@ -10,6 +10,13 @@ extract_uint() {
 	head -c $OFFSET "$Z_FILE" | tail -c 4 | od --format u --width=4 --address-radix=n | tr -d ' '
 }
 
+# Assert signature
+SIGVER=$(extract_uint 4)
+if [ $SIGVER -ne 2653586369 ]; then
+	echo "Error: Signature mismatch"
+	exit 1
+fi
+
 # Header size
 COMPRESSED_DATA_SIZE=$(extract_uint 20)
 COMPRESSED_FILE_SIZE=$(stat --printf="%s" $Z_FILE)
