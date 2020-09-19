@@ -27,7 +27,7 @@ done
 rm -f "$FILE"
 OFFSET=$((1+$HEADER_SIZE))
 for LEN in "${CHUNKS_LEN[@]}"; do
-	{ printf "\x1f\x8b\x08\x00\x00\x00\x00\x00"; tail -c +$OFFSET "$Z_FILE" | head -c $LEN; } | zcat 2> /dev/null >> "$FILE";
+	{ printf "\x1f\x8b\x08\x00\x00\x00\x00\x00"; tail -c +$OFFSET "$Z_FILE" | head -c $LEN; } | zcat >> "$FILE" || true
 	OFFSET=$((OFFSET+LEN))
 done
 
