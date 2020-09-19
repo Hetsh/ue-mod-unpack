@@ -6,26 +6,27 @@ Z_FILE="$1"
 FILE="${Z_FILE%.z}"
 
 extract_uint() {
+	local WIDTH=4
 	local OFFSET=$1
-	head -c $OFFSET "$Z_FILE" | tail -c 4 | od --format u --width=4 --address-radix=n | tr -d ' '
+	head -c $((OFFSET+WIDTH)) "$Z_FILE" | tail -c $WIDTH | od --format u --width=$WIDTH --address-radix=n | tr -d ' '
 }
 
 # Assert signature
-SIGVER=$(extract_uint 4)
+SIGVER=$(extract_uint 0)
 if [ $SIGVER -ne 2653586369 ]; then
 	echo "Error: Signature mismatch"
 	exit 1
 fi
 
 # Header size
-COMPRESSED_DATA_SIZE=$(extract_uint 20)
+COMPRESSED_DATA_SIZE=$(extract_uint 16)
 COMPRESSED_FILE_SIZE=$(stat --printf="%s" $Z_FILE)
 HEADER_SIZE=$((COMPRESSED_FILE_SIZE-COMPRESSED_DATA_SIZE))
 
 # Chunks and their length
 declare -a CHUNKS_LEN
 for (( CHUNKS=0; CHUNKS*16<=HEADER_SIZE-48; CHUNKS++ )); do
-	OFFSET=$((36+CHUNKS*16))
+	OFFSET=$((32+CHUNKS*16))
 	LEN=$(extract_uint $OFFSET)
 	CHUNKS_LEN+=($LEN)
 done
@@ -39,7 +40,7 @@ for LEN in "${CHUNKS_LEN[@]}"; do
 done
 
 # Assert file size
-EXPECTED_FILE_SIZE=$(extract_uint 28)
+EXPECTED_FILE_SIZE=$(extract_uint 24)
 ACTUAL_FILE_SIZE=$(stat --printf="%s" $FILE)
 if [ $ACTUAL_FILE_SIZE -ne $EXPECTED_FILE_SIZE ]; then
 	echo "Error: File size mismatch!"
