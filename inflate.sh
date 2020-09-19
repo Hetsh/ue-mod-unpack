@@ -45,3 +45,5 @@ if [ $ACTUAL_FILE_SIZE -ne $EXPECTED_FILE_SIZE ]; then
 	echo "Error: File size mismatch!"
 	exit 1
 fi
+
+echo "Success: Inflated $Z_FILE"
