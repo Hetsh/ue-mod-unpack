@@ -6,8 +6,8 @@ Z_FILE="$1"
 FILE="${Z_FILE%.z}"
 
 debug() {
-	#true
-	echo $1
+	true
+	#echo $1
 }
 
 extract_uint() {
