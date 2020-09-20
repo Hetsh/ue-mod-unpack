@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -e -u 
+set -e -u
 
 Z_FILE="$1"
 FILE="${Z_FILE%.z}"
@@ -47,21 +47,23 @@ debug "Debug: Contains $CHUNKS chunks."
 # Decompression
 rm -f "$FILE"
 OFFSET=$((1+$HEADER_SIZE))
-TOTAL=0
+EXPECTED=0
 for (( I=0; I<CHUNKS; I++ )); do
+	CHUNK_NR=$((I+1))
+
 	# Inflate and concatenate
 	LEN="${CHUNKS_LEN[I]}"
-	{ printf "\x1f\x8b\x08\x00\x00\x00\x00\x00"; tail -c +$OFFSET "$Z_FILE" | head -c $LEN; } | zcat 2> /dev/null >> "$FILE" && echo "Error: Unexpected gzip success!" || debug "Debug: Expected gzip error occured."
+	{ printf "\x1f\x8b\x08\x00\x00\x00\x00\x00"; tail -c +$OFFSET "$Z_FILE" | head -c $LEN; } | zcat 2> /dev/null >> "$FILE" && echo "Error: Unexpected success inflating chunk $CHUNK_NR!" && exit 2 || debug "Debug: Expected error inflating chunk $CHUNK_NR."
 	OFFSET=$((OFFSET+LEN))
 
 	# Assert inflated size
-	SIZE=${FILES_SIZE[I]}
-	TOTAL=$((TOTAL+SIZE))
-	EXPECTED=$(stat --printf="%s" $FILE)
-	if [ $EXPECTED -ne $TOTAL ]; then
-		echo "Error: Chunk $I inflated size does not match!"
-		exit 2
+	EXPECTED=$((EXPECTED+FILES_SIZE[I]))
+	SIZE=$(stat --printf="%s" $FILE)
+	if [ $SIZE -ne $EXPECTED ]; then
+		echo "Error: Chunk $CHUNK_NR inflated size does not match!"
+		exit 3
 	fi
+	debug "Debug: Inflated file size $SIZE/$EXPECTED bytes."
 done
 
 echo "Success: Inflated $Z_FILE."
