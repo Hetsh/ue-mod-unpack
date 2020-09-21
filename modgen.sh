@@ -17,7 +17,9 @@ echo -n -e "$MOD_NAME\0" >> $MOD_FILE
 MOD_PATH="../../../ShooterGame/Content/Mods/$MOD_ID"
 append_hex $((${#MOD_PATH}+1)) "$MOD_FILE"
 echo -n -e "$MOD_PATH\0" >> $MOD_FILE
-MOD_DESC_LEN=$(extract_uint 4 $MOD_INFO)
-tail -c +$((MOD_DESC_LEN+1)) "$MOD_INFO" | head -c $((MOD_DESC_LEN+4)) >> "$MOD_FILE"
-echo -n -e "\x01\x00\x00\x00\x12\x00\x00\x00\x53\x74\x72\x75\x63\x74\x75\x72\x65\x73\x50\x6c\x75\x73\x4d\x6f\x64\x00\x33\xff\x22\xff\x02\x00\x00\x00\x01" >> "$MOD_FILE"
+MOD_DESC_LEN=$(extract_uint 0 $MOD_INFO)
+MOD_DESC_OFFSET=4
+MOD_NUM_LEN=4
+tail -c +$((MOD_DESC_LEN+MOD_DESC_OFFSET+1)) "$MOD_INFO" | head -c $((MOD_DESC_LEN+MOD_DESC_OFFSET+MOD_NUM_LEN)) >> "$MOD_FILE"
+echo -n -e "\x33\xff\x22\xff\x02\x00\x00\x00\x01" >> "$MOD_FILE"
 cat "$MOD_META" >> "$MOD_FILE"
