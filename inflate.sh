@@ -10,14 +10,10 @@ debug() {
 	#echo $1
 }
 
-extract_uint() {
-	local WIDTH=4
-	local OFFSET=$1
-	head -c $((OFFSET+WIDTH)) "$Z_FILE" | tail -c $WIDTH | od --format u --width=$WIDTH --address-radix=n | tr -d ' '
-}
+source "$(dirname $0)/extract.sh"
 
 # Assert signature
-SIGVER=$(extract_uint 0)
+SIGVER=$(extract_uint $Z_FILE 0)
 if [ $SIGVER -ne 2653586369 ]; then
 	echo "Error: Signature mismatch"
 	exit 1
@@ -25,7 +21,7 @@ fi
 debug "Debug: Signature verified"
 
 # Header size
-COMPRESSED_DATA_SIZE=$(extract_uint 16)
+COMPRESSED_DATA_SIZE=$(extract_uint $Z_FILE 16)
 COMPRESSED_FILE_SIZE=$(stat --printf="%s" $Z_FILE)
 HEADER_SIZE=$((COMPRESSED_FILE_SIZE-COMPRESSED_DATA_SIZE))
 debug "Debug: Header size is $HEADER_SIZE bytes"
@@ -35,11 +31,11 @@ declare -a CHUNKS_LEN
 declare -a FILES_SIZE
 for (( CHUNKS=0; CHUNKS*16<=HEADER_SIZE-48; CHUNKS++ )); do
 	OFFSET=$((32+CHUNKS*16))
-	LEN=$(extract_uint $OFFSET)
+	LEN=$(extract_uint $Z_FILE $OFFSET)
 	CHUNKS_LEN+=($LEN)
 
 	OFFSET=$((OFFSET+8))
-	SIZE=$(extract_uint $OFFSET)
+	SIZE=$(extract_uint $Z_FILE $OFFSET)
 	FILES_SIZE+=($SIZE)
 done
 debug "Debug: Contains $CHUNKS chunks"
