@@ -62,4 +62,4 @@ for (( I=0; I<CHUNKS; I++ )); do
 	debug "Debug: Inflated file size $SIZE/$EXPECTED bytes"
 done
 
-echo "Success: Inflated $Z_FILE"
+debug "Debug: Inflated $Z_FILE"
