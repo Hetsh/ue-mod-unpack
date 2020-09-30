@@ -19,3 +19,4 @@ The following mods are tested with my [ARK docker image](https://hub.docker.com/
 * [eco's Trees](https://steamcommunity.com/sharedfiles/filedetails/?id=670764308) (Mod-ID: 670764308)
 * [eco's Garden Decor](https://steamcommunity.com/sharedfiles/filedetails/?id=880871931) (Mod-ID: 880871931)
 * [eco's Role Play Decor](https://steamcommunity.com/sharedfiles/filedetails/?id=741203089) (Mod-ID: 741203089)
+* [Rare Sightings](https://steamcommunity.com/sharedfiles/filedetails/?id=1300713111) (Mod-ID: 1300713111)
