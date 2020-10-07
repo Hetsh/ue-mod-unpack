@@ -45,8 +45,6 @@ rm -f "$FILE"
 OFFSET=$((1+$HEADER_SIZE))
 EXPECTED=0
 for (( I=0; I<CHUNKS; I++ )); do
-	CHUNK_NR=$((I+1))
-
 	# Inflate and concatenate
 	LEN="${CHUNKS_LEN[I]}"
 	{ printf "\x1f\x8b\x08\x00\x00\x00\x00\x00"; tail -c +$OFFSET "$Z_FILE" | head -c $LEN; } | zcat 2> /dev/null >> "$FILE" && echo "Error: Unexpected success inflating chunk $CHUNK_NR" && exit 2 || debug "Debug: Expected error inflating chunk $CHUNK_NR"
@@ -56,6 +54,7 @@ for (( I=0; I<CHUNKS; I++ )); do
 	EXPECTED=$((EXPECTED+FILES_SIZE[I]))
 	SIZE=$(stat --printf="%s" $FILE)
 	if [ $SIZE -ne $EXPECTED ]; then
+		CHUNK_NR=$((I+1))
 		echo "Error: Chunk $CHUNK_NR inflated size does not match"
 		exit 3
 	fi
