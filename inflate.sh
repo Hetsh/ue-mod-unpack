@@ -44,6 +44,7 @@ debug "Debug: Contains $CHUNKS chunks"
 rm -f "$FILE"
 OFFSET=$((1+$HEADER_SIZE))
 EXPECTED=0
+CHUNK_NR=1
 for (( I=0; I<CHUNKS; I++ )); do
 	# Inflate and concatenate
 	LEN="${CHUNKS_LEN[I]}"
