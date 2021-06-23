@@ -23,6 +23,9 @@ The following mods are tested with my [ARK docker image](https://hub.docker.com/
 * [eco's Role Play Decor](https://steamcommunity.com/sharedfiles/filedetails/?id=741203089) (Mod-ID: 741203089)
 * [Rare Sightings](https://steamcommunity.com/sharedfiles/filedetails/?id=1300713111) (Mod-ID: 1300713111)
 * [Olympus Map](https://steamcommunity.com/sharedfiles/filedetails/?id=970855993) (Mod-ID: 970855993)
+* [Sleepable Beds](https://steamcommunity.com/sharedfiles/filedetails/?id=1650069767) (Mod-ID: 1650069767)
+* [Classic Flyers](https://steamcommunity.com/sharedfiles/filedetails/?id=895711211) (Mod-ID: 895711211)
+* [Immersive Taming](https://steamcommunity.com/sharedfiles/filedetails/?id=1251632107) (Mod-ID: 1251632107)
 
 # Inspiration
 This project is partially based on other work:
